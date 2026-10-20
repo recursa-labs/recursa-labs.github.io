@@ -4,37 +4,20 @@
   const main = document.querySelector('#main');
   const views = [...document.querySelectorAll('[data-view]')];
   const navLinks = [...document.querySelectorAll('[data-route]')];
-  const motionControl = document.querySelector('.motion-control');
   const field = document.querySelector('#learning-field');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  let preference = null;
-  try { preference = sessionStorage.getItem('lab-motion'); } catch { /* Storage may be unavailable in private contexts. */ }
-  let paused = preference ? preference === 'paused' : reducedMotion.matches;
   let currentView = 'home';
   let fieldVisible = true;
 
   function updateMotion() {
-    const active = !paused && currentView === 'home' && fieldVisible && !document.hidden;
+    const active = !reducedMotion.matches && currentView === 'home' && fieldVisible && !document.hidden;
     if (typeof field.pauseAnimations === 'function') {
       if (active) field.unpauseAnimations();
       else field.pauseAnimations();
     }
-    document.body.classList.toggle('motion-paused', paused);
-    motionControl.setAttribute('aria-pressed', String(paused));
-    motionControl.setAttribute('aria-label', paused ? 'Play ambient animation' : 'Pause ambient animation');
-    motionControl.title = paused ? 'Play animation' : 'Pause animation';
   }
 
-  motionControl.addEventListener('click', () => {
-    paused = !paused;
-    preference = paused ? 'paused' : 'playing';
-    try { sessionStorage.setItem('lab-motion', preference); } catch { /* The control also works without storage. */ }
-    updateMotion();
-  });
-  reducedMotion.addEventListener('change', () => {
-    if (!preference) paused = reducedMotion.matches;
-    updateMotion();
-  });
+  reducedMotion.addEventListener('change', updateMotion);
   document.addEventListener('visibilitychange', updateMotion);
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(entries => {
@@ -57,7 +40,7 @@
     updateMotion();
     if (moveFocus) main.focus({preventScroll: true});
     requestAnimationFrame(() => {
-      if (direction) document.querySelector('#direction').scrollIntoView({behavior: paused ? 'instant' : 'smooth', block: 'start'});
+      if (direction) document.querySelector('#direction').scrollIntoView({behavior: reducedMotion.matches ? 'instant' : 'smooth', block: 'start'});
       else window.scrollTo({top: 0, behavior: 'instant'});
     });
   }
