@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fafaf7">
+<title>Learning Across Games: Why We Chose Batches — recursa labs</title>
+<meta name="description" content="What our ARC-AGI-3 experiments taught us about shared skills, regression checks, and specialization.">
+<link rel="canonical" href="https://recursa-labs.github.io/blog/learning-across-games/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Learning Across Games: Why We Chose Batches">
+<meta property="og:description" content="What our ARC-AGI-3 experiments taught us about shared skills, regression checks, and specialization.">
+<meta property="og:url" content="https://recursa-labs.github.io/blog/learning-across-games/">
+<meta property="og:site_name" content="recursa labs">
+<link rel="icon" type="image/svg+xml" href="/assets/mark.svg">
+<link rel="preload" href="/assets/inter-400.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="page-shell">
+<header class="site-header">
+<a href="/#/" class="wordmark" aria-label="recursa labs home"><img src="/assets/mark.svg" width="40" height="40" alt=""></a>
+<nav aria-label="Main navigation"><a href="/#/">Home</a><a href="/blog/" aria-current="page">Blog</a><a href="/#/team">Team</a></nav>
+</header>
+<main id="main" tabindex="-1">
+<article class="article">
+<a class="article-back" href="/blog/">← All posts</a>
+<header class="article-header">
+<p class="article-kicker">CONTINUAL LEARNING / 04</p>
+<h1>Learning Across Games: Why We Chose Batches</h1>
+<p class="article-deck">What our ARC-AGI-3 experiments taught us about shared skills, regression checks, and specialization.</p>
+<p class="article-meta">recursa labs · <time datetime="2026-10-22">October 22, 2026</time> · 5 min read</p>
+</header>
+<div class="article-body">
+<p>In our batched-learning experiments, we achieved 100% across all 25 games in our ARC-AGI-3 agent-versus-human-baseline evaluation. The result came from evolving a shared skill across batches of games. It is a result on the games in that experiment, not a claim about unseen-game performance.</p>
+<p>The more useful story is an architectural choice we made along the way. Should an agent learn across several games as it goes, or specialize on each game independently and combine the lessons afterward?</p>
+<p>Both approaches can produce better skills. They put the burden of finding reusable knowledge in very different places.</p>
+
+<h2>What we are actually changing</h2>
+<p>Our research setup has three parts. A task agent plays using a domain skill and builds task memory. A learner reads evidence from those attempts and proposes edits to the domain skill and its own learning procedure. A fixed controller schedules sessions, records variants, and applies the evaluation rules.</p>
+<p>The foundation model and evaluation rules stay fixed during the experiment. The editable material is external: instructions and supporting skill files. A candidate is a version of that material which we can evaluate and compare with earlier versions.</p>
+<p>Fresh task attempts start without the previous player's task memory. That lets us ask whether the skill helps a new agent learn, rather than simply letting the old agent remember the solution. As discussed in <a href="/blog/learning-to-learn/">the different levels of learning</a>, we also need to keep solutions out of the shared skill itself.</p>
+
+<h2>Option 1: learn across batches</h2>
+<p>The approach we chose uses batches of three games to evolve one shared domain skill. Experience from several games informs the learner's revisions. Regression checks at batch boundaries test whether changes have damaged earlier capabilities.</p>
+<p>The batch is a practical compromise. Replaying the accumulated games after every generation edit is expensive. Deferring those checks reduces evaluation work, at the cost of leaving some regressions undiscovered until the next checkpoint. The batch size controls how much change we allow between broader checks.</p>
+<p>There is also a learning benefit. A procedure useful in game A has to coexist with what the learner encounters in games B and C. Conflicting evidence arrives while the shared skill is being formed. The learner must qualify, revise, or discard advice that is too specific.</p>
+
+<h2>Option 2: specialize first, consolidate later</h2>
+<p>The alternative ran independent learning loops on different games. Each branch had its own domain skill, learner procedure, memory, and archive of candidates. Local changes were evaluated only on that branch's game.</p>
+<p>Once every branch reached its success threshold, a consolidator would read the successful local policies, reconcile them into one shared skill, and evaluate that skill alone on fresh attempts across the selected games. This resembles map-reduce: distribute the local work, then combine its outputs.</p>
+<p>The appeal was elapsed time. Independent branches could learn concurrently. But local success did not guarantee that their procedures would form a useful shared skill.</p>
+
+<figure><a href="/assets/blog/batched-learning.svg"><img src="/assets/blog/batched-learning.svg" width="800" height="560" alt="Batched learning brings evidence from games A, B, and C into a shared skill before regression checks. The discarded alternative evolves separate skills first and postpones reconciliation until consolidation." loading="lazy"></a><figcaption>Where does the pressure to find reusable procedures enter? Batching brings it into skill development; independent branches defer it to the merge.<a class="figure-expand" href="/assets/blog/batched-learning.svg">View diagram at full size</a></figcaption></figure>
+
+<h2>Why we chose batches</h2>
+<p>Our main concern emerged from the experiments: a learner that sees only game A tends to write rules for game A. A local score rewards whatever helps on that game, including overly specific advice. The consolidation step then has to undo some of that specialization.</p>
+<p>For example, “follow the red object” could be useful in one game and misleading in another. “Establish which object each control affects before planning a route” is a more general procedure. A learner exposed to multiple games has earlier opportunities to discover that distinction.</p>
+<p>Our batch of three brings that filtering into each learning step. It encourages procedures that accommodate multiple games while they are being developed. It does not guarantee generalization, and we have not established that three is an optimal batch size. It was the practical choice for this experiment.</p>
+<p>The independent design had two further problems. Its acceptance gate used the training games without the hidden validation set, so passing it would not establish transfer to unseen games. It also required 100% on every local game before consolidation could begin.</p>
+<p>That second gate was especially brittle for human-relative action efficiency. Clearing a game and matching the human baseline are different requirements. A single stubborn game could prevent consolidation indefinitely, even when the other branches had useful procedures to contribute. Our experience with near-saturated scores and games that remained far below the target made that risk concrete.</p>
+<p>We discarded independent local learning followed by consolidation as the main strategy. Parallel execution remains a scheduling tool we can consider where experiments are independent; it does not require separate per-game learning policies.</p>
+
+<h2>Research before productization</h2>
+<p>The research loop gives us controlled places to compare policies: fixed evaluation rules, recorded versions, explicit starting conditions, and regression results. Reproducibility also requires recording model and tool configurations, task selection, and resource use. A saved skill alone cannot explain a result.</p>
+<p>Our product harness has a different operating goal: improve while doing useful work. It preserves task progress, introduces local and shared reviewers when useful, and can request research when experience leaves a question unresolved. Its <a href="/blog/recursive-language-models/">recursive runtime</a> supports that work. The experiments help us decide which learning behavior deserves to become part of the product.</p>
+<p>One idea survives from consolidation: reconciling conflicting procedures is part of the learner's job throughout a run. Another remains a research proposal: periodically distill a skill and begin a fresh run with empty learner memory and archive, preserving useful guidance while testing how much accumulated history it still needs.</p>
+<p>We are now experimenting with simulated Luma acceptance: yes/no predictions with explicit confidence, evaluated against labeled examples. It changes the feedback problem from interactive game play to classification. That gives us another setting in which to test the question that <a href="/blog/agents-shouldnt-start-over/">started this work</a>: does experience produce a better way to approach the next task?</p>
+
+</div>
+<aside class="series-nav" aria-label="Continue the series">
+<h2>In this series</h2>
+<ol><li><a href="/blog/agents-shouldnt-start-over/">Agents Shouldn’t Start Over</a></li>
+<li><a href="/blog/recursive-language-models/">Recursive Language Models, Explained</a></li>
+<li><a href="/blog/learning-to-learn/">Learning Facts, Learning Methods, Learning to Learn</a></li>
+<li><a href="/blog/learning-across-games/" aria-current="page">Learning Across Games: Why We Chose Batches</a></li></ol>
+</aside>
+</article>
+</main>
+<footer class="site-footer"><span>recursa labs</span><span>2026</span></footer>
+</div>
+</body>
+</html>

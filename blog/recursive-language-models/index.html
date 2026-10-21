@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fafaf7">
+<title>Recursive Language Models, Explained — recursa labs</title>
+<meta name="description" content="How external context, code, and focused model calls make large tasks easier to work with.">
+<link rel="canonical" href="https://recursa-labs.github.io/blog/recursive-language-models/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Recursive Language Models, Explained">
+<meta property="og:description" content="How external context, code, and focused model calls make large tasks easier to work with.">
+<meta property="og:url" content="https://recursa-labs.github.io/blog/recursive-language-models/">
+<meta property="og:site_name" content="recursa labs">
+<link rel="icon" type="image/svg+xml" href="/assets/mark.svg">
+<link rel="preload" href="/assets/inter-400.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="page-shell">
+<header class="site-header">
+<a href="/#/" class="wordmark" aria-label="recursa labs home"><img src="/assets/mark.svg" width="40" height="40" alt=""></a>
+<nav aria-label="Main navigation"><a href="/#/">Home</a><a href="/blog/" aria-current="page">Blog</a><a href="/#/team">Team</a></nav>
+</header>
+<main id="main" tabindex="-1">
+<article class="article">
+<a class="article-back" href="/blog/">← All posts</a>
+<header class="article-header">
+<p class="article-kicker">CONTINUAL LEARNING / 02</p>
+<h1>Recursive Language Models, Explained</h1>
+<p class="article-deck">How external context, code, and focused model calls make large tasks easier to work with.</p>
+<p class="article-meta">recursa labs · <time datetime="2026-10-22">October 22, 2026</time> · 4 min read</p>
+</header>
+<div class="article-body">
+<p class="article-lead">An agent does not need to hold everything in its context window to work with it. It needs a way to inspect information, ask focused questions, and keep track of the answers.</p>
+<p>That is the useful idea behind <a href="https://arxiv.org/html/2512.24601v1">Recursive Language Models</a>, a paper by Alex L. Zhang, Tim Kraska, and Omar Khattab. It changes how a model accesses a large input. The input becomes something the model can operate on through code.</p>
+<p>For our work at Recursa, this is an execution foundation. Our <a href="/blog/agents-shouldnt-start-over/">larger goal</a> is to make agents improve through experience. Before an agent can learn from a long history of work, it needs a practical way to examine that history.</p>
+<h2>A context window is a workspace</h2>
+<p>Imagine asking an agent to analyze several years of customer-support conversations: which problems increased after a product release, and what evidence connects them to the change?</p>
+<p>Pasting the entire archive into a prompt creates two problems. It may exceed the model's context window. Even if it fits, finding and relating the right details can become harder as the input grows. Summarizing everything first also makes a decision too early: which details can safely be discarded before we know what matters?</p>
+<p>The RLM approach keeps the original archive available outside the model's immediate context. In the paper's implementation, it lives in a variable inside a Python REPL: a programming environment that retains variables between code executions. The model receives information about that environment and writes code to explore it.</p>
+<figure><a href="/assets/blog/recursive-context.svg"><img src="/assets/blog/recursive-context.svg" alt="A model inspects an external support archive through Python, sends selected conversations to focused model calls, and combines their findings into an answer." width="800" height="500" loading="lazy"></a><figcaption>The full archive remains available. Only selected excerpts and intermediate findings enter model calls. This is an illustrative workflow, not a benchmark from the paper.<a class="figure-expand" href="/assets/blog/recursive-context.svg">View diagram at full size</a></figcaption></figure>
+<h2>Inspect, interpret, combine</h2>
+<p>Our support example might unfold in four steps.</p>
+<ol>
+<li><strong>Inspect the archive.</strong> The model writes Python to examine a few records and identify their structure: dates, product versions, conversation IDs, and message text. It can count records without reading every conversation into its own context.</li>
+<li><strong>Select useful slices.</strong> Code separates conversations before and after the release. The model can inspect samples or search for candidate issues, then refine its selection as it learns more.</li>
+<li><strong>Ask focused semantic questions.</strong> A smaller model call examines a manageable batch: “Which conversations describe a login failure? Return the conversation IDs and supporting excerpts.” This handles meaning that a keyword search might miss.</li>
+<li><strong>Combine and check.</strong> Python aggregates the returned labels. The root model examines the findings, requests additional evidence where needed, and writes an answer linked to the original records.</li>
+</ol>
+<p>The division of labor matters. Code is useful for counting, filtering, joining, and preserving exact identifiers. Model calls are useful for interpreting ambiguous language. Neither has to do the other's job.</p>
+<p>The workflow also depends on the question. Finding one incident may require only a few excerpts. Estimating how common a problem is requires systematic coverage; searching for a convenient keyword would bias the result. An RLM provides a way to organize that work, but the model still has to choose a sound method.</p>
+<h2>What makes it recursive?</h2>
+<p>The model can construct a smaller problem from the input and invoke a model to solve it. In the general formulation, that smaller problem can use the same mechanism again. The root then uses the returned result to continue its own work.</p>
+<p>The distinctive part is the combination of subcalls with <em>external context</em>. Delegating tasks alone does not remove the root model's input limit. An RLM can manipulate a large input before deciding which parts any model call should see.</p>
+<p>There is an important boundary between the idea and the experiment: the paper evaluated a maximum recursion depth of one. Its root model could make subcalls, but those calls were ordinary language-model calls. The results do not require an arbitrarily deep tree of agents. See the paper's <a href="https://arxiv.org/html/2512.24601v1#S5">limitations section</a>.</p>
+<h2>Useful, with tradeoffs</h2>
+<p>The paper reports handling inputs above ten million tokens on its long-context evaluations. That demonstrates a useful change in what the system can access, without enlarging the underlying model's context window. It does not mean every task becomes easier or cheaper. See the <a href="https://arxiv.org/html/2512.24601v1#S3">results and discussion</a>.</p>
+<p>Extra calls introduce overhead, and model decisions can be wasteful. The authors observed repeated checking and unnecessary subcalls. Costs varied substantially across runs, with expensive outliers. On shorter inputs, a direct model call could perform better. Even the version with external context but no subcalls sometimes beat the full RLM.</p>
+<h2>Where learning enters</h2>
+<p>An RLM changes how a task is executed. It does not, by itself, preserve better procedures for the next task or improve the model's weights.</p>
+<p>Persistent learning adds another loop: examine what happened, propose a better procedure, evaluate it, and retain changes supported by evidence. Recursive execution can help inspect traces and delegate focused reviews. The rules governing which changes survive must come from the learning system.</p>
+<p>That distinction guides our architecture. In <a href="/blog/learning-to-learn/">the next post</a>, we separate facts, methods, and improvements to the learning process itself. In <a href="/blog/learning-across-games/">our game experiments</a>, we examine how shared procedures evolve when they must work across several tasks.</p>
+
+</div>
+<aside class="series-nav" aria-label="Continue the series">
+<h2>In this series</h2>
+<ol><li><a href="/blog/agents-shouldnt-start-over/">Agents Shouldn’t Start Over</a></li>
+<li><a href="/blog/recursive-language-models/" aria-current="page">Recursive Language Models, Explained</a></li>
+<li><a href="/blog/learning-to-learn/">Learning Facts, Learning Methods, Learning to Learn</a></li>
+<li><a href="/blog/learning-across-games/">Learning Across Games: Why We Chose Batches</a></li></ol>
+</aside>
+</article>
+</main>
+<footer class="site-footer"><span>recursa labs</span><span>2026</span></footer>
+</div>
+</body>
+</html>

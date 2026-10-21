@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fafaf7">
+<title>Agents Shouldn’t Start Over — recursa labs</title>
+<meta name="description" content="Why our work on a self-learning browser led us to study agents that improve through experience.">
+<link rel="canonical" href="https://recursa-labs.github.io/blog/agents-shouldnt-start-over/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agents Shouldn’t Start Over">
+<meta property="og:description" content="Why our work on a self-learning browser led us to study agents that improve through experience.">
+<meta property="og:url" content="https://recursa-labs.github.io/blog/agents-shouldnt-start-over/">
+<meta property="og:site_name" content="recursa labs">
+<link rel="icon" type="image/svg+xml" href="/assets/mark.svg">
+<link rel="preload" href="/assets/inter-400.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="page-shell">
+<header class="site-header">
+<a href="/#/" class="wordmark" aria-label="recursa labs home"><img src="/assets/mark.svg" width="40" height="40" alt=""></a>
+<nav aria-label="Main navigation"><a href="/#/">Home</a><a href="/blog/" aria-current="page">Blog</a><a href="/#/team">Team</a></nav>
+</header>
+<main id="main" tabindex="-1">
+<article class="article">
+<a class="article-back" href="/blog/">← All posts</a>
+<header class="article-header">
+<p class="article-kicker">CONTINUAL LEARNING / 01</p>
+<h1>Agents Shouldn’t Start Over</h1>
+<p class="article-deck">Why our work on a self-learning browser led us to study agents that improve through experience.</p>
+<p class="article-meta">recursa labs · <time datetime="2026-10-22">October 22, 2026</time> · 4 min read</p>
+</header>
+<div class="article-body">
+<p>An agent spends ten minutes figuring out a website. It finds the right page, discovers that a button opens a dialog, works around an unexpected state, and finishes the task. Tomorrow, another run encounters the same site. How much of that work should it repeat?</p>
+<p>That question brought us to continual learning. Some of our team built <a href="https://github.com/agentrhq/webcmd">Webcmd</a>, a self-learning browser system that retains useful navigation context as agents work. Later runs can consult what earlier runs discovered: page states, workflows, pitfalls, and ways to recover. Live browser behavior remains the source of truth, because websites change.</p>
+<p>Working on that problem made a broader possibility hard to ignore. If experience can make the next browser task easier, could it improve how an agent audits code, optimizes a GPU kernel, or reasons through an unfamiliar game?</p>
+<h2>Experience should change the next attempt</h2>
+<p>A capable model can still repeat an expensive mistake. It may investigate the same dead end, reconstruct a procedure it previously discovered, or confidently use an approach that failed yesterday. A longer conversation helps within one session, but it does not automatically produce useful guidance for the next one.</p>
+<p>We want experience to leave something better behind: a reusable procedure, a corrected assumption, or a sharper test for deciding what to try. In our experiments, the model's weights stay fixed. What evolves is its external guidance: skills and memory that the model can read and revise.</p>
+<figure><a href="/assets/blog/experience.svg"><img src="/assets/blog/experience.svg" alt="Without retained knowledge, each run repeats exploration. With a revisable skill, experience from one run informs the next, while new observations can correct the skill." width="800" height="430" loading="lazy"></a><figcaption>The useful output of a task can include a better starting point for the next task.<a class="figure-expand" href="/assets/blog/experience.svg">View diagram at full size</a></figcaption></figure>
+<p>“Never repeat the same mistake twice” is a good aspiration. Making it real requires more than recording failures. A lesson needs a scope: when does it apply, what evidence supports it, and what would show that it has become wrong?</p>
+<p>That matters for cost as well as quality. Reusing a reliable procedure could reduce exploration and token use. But producing, reviewing, and testing that procedure also costs something. The useful comparison is the total cost of learning and subsequent work, rather than just the shortest successful run.</p>
+<h2>What could agents learn?</h2>
+<p>Browser navigation is one setting with a fairly concrete feedback loop. We are interested in several others. These are research directions, with different kinds of feedback and different ways to fool ourselves.</p>
+<ul>
+<li><strong>QA audits.</strong> An agent could learn from findings that maintainers confirm or reject. Beyond detecting a possible bug, it should classify severity as high, medium, or low and state high or low confidence. The feedback should improve both the investigation method and the relationship between confidence and correctness.</li>
+<li><strong>Long-running trading research.</strong> This offers a difficult test of learning from delayed, noisy outcomes. A profitable outcome does not prove a good decision, and a pattern can disappear as conditions change. The research question is whether an agent can revise its methods without mistaking luck for evidence.</li>
+<li><strong>Reddit marketing.</strong> Different communities respond to different kinds of contributions. An agent could learn which questions, formats, and explanations are useful in each community, using moderation outcomes and substantive responses as feedback. Popularity alone would be an incomplete measure of quality.</li>
+<li><strong>Simulated Luma acceptance.</strong> In a controlled acceptance-prediction task, the agent produces a yes/no classification and high/low confidence. Labeled examples let us examine whether its decision rules improve and whether high confidence actually corresponds to more reliable predictions.</li>
+<li><strong>Faceless content creation.</strong> An agent producing content without an on-camera presenter could improve its research, scripting, and editing procedures across successive pieces. Retention and audience response provide feedback, though topic choice and distribution make attribution difficult.</li>
+<li><strong>GPU kernel optimization.</strong> Correctness checks and measured runtime provide concrete feedback. An agent could retain techniques that work for particular computational patterns, along with the conditions where they help. A faster result on one input is a starting point for further testing.</li>
+</ul>
+<p>The common structure is straightforward: attempt a task, observe the outcome, propose a lesson, and test whether that lesson helps later work. The hard part is deciding what counts as evidence.</p>
+<h2>Remembering is only the beginning</h2>
+<p>People rarely become better at a craft by retaining a complete transcript of every attempt. We develop habits, compare cases, and revise our methods. That is a useful analogy for the system we want to build, without assuming that an agent learns in the same way a person does.</p>
+<p>A growing notebook can become a liability if it accumulates contradictory advice or solutions that apply to only one example. Our goal is guidance that becomes more useful, not merely longer. That means studying which experiences to retain, how to reconcile them, and how to test the resulting changes.</p>
+<p>The next posts unpack those questions: <a href="/blog/recursive-language-models/">the recursive execution model</a> behind our harness, <a href="/blog/learning-to-learn/">the different things a system can learn</a>, and <a href="/blog/learning-across-games/">what game experiments taught us about learning across tasks</a>.</p>
+
+</div>
+<aside class="series-nav" aria-label="Continue the series">
+<h2>In this series</h2>
+<ol><li><a href="/blog/agents-shouldnt-start-over/" aria-current="page">Agents Shouldn’t Start Over</a></li>
+<li><a href="/blog/recursive-language-models/">Recursive Language Models, Explained</a></li>
+<li><a href="/blog/learning-to-learn/">Learning Facts, Learning Methods, Learning to Learn</a></li>
+<li><a href="/blog/learning-across-games/">Learning Across Games: Why We Chose Batches</a></li></ol>
+</aside>
+</article>
+</main>
+<footer class="site-footer"><span>recursa labs</span><span>2026</span></footer>
+</div>
+</body>
+</html>

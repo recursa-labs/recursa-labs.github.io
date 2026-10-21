@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="title desc">
+<title id="title">Working with context outside the model</title>
+<desc id="desc">A root model uses Python to inspect a large archive. Selected records go to focused model calls. Their findings are combined with code and returned to the root model for its answer.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#627b4e"/></marker></defs>
+<rect width="800" height="500" rx="16" fill="#fafaf7"/>
+<g font-family="Arial, Helvetica, sans-serif" fill="#20251f">
+<text x="36" y="42" font-size="22" font-weight="700">Read what matters. Keep the source available.</text>
+<rect x="36" y="72" width="242" height="130" rx="10" fill="#edf0e8" stroke="#627b4e"/>
+<text x="56" y="102" font-size="19" font-weight="700">External archive</text>
+<text x="56" y="130" font-size="16">All support conversations</text>
+<text x="56" y="157" font-size="16">Stored in a Python variable</text>
+<text x="56" y="183" font-size="14" fill="#627b4e">Not pasted into the root prompt</text>
+<rect x="466" y="72" width="298" height="130" rx="10" fill="#fff" stroke="#20251f"/>
+<text x="486" y="102" font-size="19" font-weight="700">Root model</text>
+<text x="486" y="130" font-size="16">Plans the investigation</text>
+<text x="486" y="157" font-size="16">Writes Python; reads results</text>
+<text x="486" y="183" font-size="16">Revises the next question</text>
+<path d="M466 127H280" fill="none" stroke="#627b4e" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="304" y="115" font-size="14">inspect / filter</text>
+<path d="M278 168H464" fill="none" stroke="#627b4e" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="307" y="190" font-size="14">selected excerpts</text>
+<path d="M615 202V235H400V263" fill="none" stroke="#627b4e" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="52" y="244" font-size="15" fill="#627b4e">Focused questions on manageable batches</text>
+<rect x="36" y="266" width="220" height="84" rx="10" fill="#fff" stroke="#627b4e"/>
+<rect x="290" y="266" width="220" height="84" rx="10" fill="#fff" stroke="#627b4e"/>
+<rect x="544" y="266" width="220" height="84" rx="10" fill="#fff" stroke="#627b4e"/>
+<g fill="none" stroke="#627b4e" stroke-width="2" marker-end="url(#arrow)"><path d="M400 253H146V264"/><path d="M400 253H654V264"/></g>
+<g text-anchor="middle" font-size="16"><text x="146" y="300" font-weight="700">Model call A</text><text x="146" y="326">Label conversations</text><text x="400" y="300" font-weight="700">Model call B</text><text x="400" y="326">Label conversations</text><text x="654" y="300" font-weight="700">Model call C</text><text x="654" y="326">Label conversations</text></g>
+<path d="M146 350V376H400M654 350V376H400M400 350V400" fill="none" stroke="#627b4e" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="168" y="402" width="464" height="62" rx="10" fill="#edf0e8" stroke="#627b4e"/>
+<text x="400" y="428" text-anchor="middle" font-size="17" font-weight="700">Code combines findings; root writes the answer</text>
+<text x="400" y="451" text-anchor="middle" font-size="15">Counts, evidence, and original conversation IDs</text>
+</g></svg>

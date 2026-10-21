@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fafaf7">
+<title>Learning Facts, Learning Methods, Learning to Learn — recursa labs</title>
+<meta name="description" content="What changes when an agent learns a task, improves its methods, and revises how it learns.">
+<link rel="canonical" href="https://recursa-labs.github.io/blog/learning-to-learn/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Learning Facts, Learning Methods, Learning to Learn">
+<meta property="og:description" content="What changes when an agent learns a task, improves its methods, and revises how it learns.">
+<meta property="og:url" content="https://recursa-labs.github.io/blog/learning-to-learn/">
+<meta property="og:site_name" content="recursa labs">
+<link rel="icon" type="image/svg+xml" href="/assets/mark.svg">
+<link rel="preload" href="/assets/inter-400.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="page-shell">
+<header class="site-header">
+<a href="/#/" class="wordmark" aria-label="recursa labs home"><img src="/assets/mark.svg" width="40" height="40" alt=""></a>
+<nav aria-label="Main navigation"><a href="/#/">Home</a><a href="/blog/" aria-current="page">Blog</a><a href="/#/team">Team</a></nav>
+</header>
+<main id="main" tabindex="-1">
+<article class="article">
+<a class="article-back" href="/blog/">← All posts</a>
+<header class="article-header">
+<p class="article-kicker">CONTINUAL LEARNING / 03</p>
+<h1>Learning Facts, Learning Methods, Learning to Learn</h1>
+<p class="article-deck">What changes when an agent learns a task, improves its methods, and revises how it learns.</p>
+<p class="article-meta">recursa labs · <time datetime="2026-10-22">October 22, 2026</time> · 4 min read</p>
+</header>
+<div class="article-body">
+<p>An agent opens an unfamiliar puzzle. It presses a button, watches a red object move, and writes down what happened. A few attempts later, it can finish the level.</p>
+<p>What did it learn?</p>
+<p>It might have learned a fact about this puzzle. It might have discovered a better way to investigate unfamiliar controls. Or it might have improved the procedure it uses to judge its own investigations. Those changes have different lifetimes, different evidence requirements, and different value on the next task.</p>
+<p>Our approach separates them. The foundation model stays fixed; experience changes external memory and written procedures that future agents can use. As we argued in <a href="/blog/agents-shouldnt-start-over/">Agents Shouldn't Start Over</a>, useful experience should survive the session that produced it. The harder question is what deserves to survive.</p>
+
+<h2>Learning what happens</h2>
+<p>Start with the puzzle. The agent believes a button moves the red object one square to the right. It predicts a movement, presses the button, and compares the next observation with its prediction.</p>
+<p>If the object does not move, the belief needs work. Perhaps a wall blocked it. Perhaps the control affects a different object. Perhaps movement depends on a hidden mode.</p>
+<p>This is learning a <em>world model</em>: an account of how the environment behaves. Its contents belong with the task. “The red object moves right when this button is pressed” may be valuable throughout this game and useless in the next one.</p>
+<p>A familiar human parallel is learning where the light switch is in a new room. Remembering it saves effort next time. It does not establish where every room's switch must be.</p>
+
+<h2>Learning how to investigate</h2>
+<p>Now suppose the agent keeps pressing several controls together. It sees changes, but cannot tell which action caused which effect. More observations accumulate without resolving the uncertainty.</p>
+<p>The problem has moved beyond a mistaken belief. The investigation procedure is producing ambiguous evidence.</p>
+<p>A useful revision might be: “When actions are cheap and reversible, change one control at a time and compare the before-and-after state.” The next puzzle can benefit from that instruction without inheriting the first puzzle's mechanics or solution.</p>
+<p>This resembles learning a study or debugging habit. Someone can memorize the answer to one exercise, or discover a way to work through unfamiliar exercises. Both are learning, but only the latter is a plausible method to carry across different problems.</p>
+<p>The conditions matter. Isolating variables may be practical in a resettable puzzle and impossible in a changing social environment. A transferable procedure should say when it applies; “always do this” is often an overgeneralization.</p>
+
+<figure>
+  <a href="/assets/blog/learning-levels.svg"><img src="/assets/blog/learning-levels.svg" width="800" height="500" alt="Three nested feedback loops: actions revise task beliefs; repeated investigation failures revise learning methods; review evidence revises the method for judging those changes." loading="lazy"></a>
+  <figcaption>Each loop changes a different object. A surprising observation usually belongs in the innermost loop, not at every level at once.<a class="figure-expand" href="/assets/blog/learning-levels.svg">View diagram at full size</a></figcaption>
+</figure>
+
+<h2>Learning how to improve the method</h2>
+<p>Suppose a reviewer keeps recommending new procedures after a single failed action. The player becomes inconsistent, abandoning approaches before it has collected enough evidence to judge them.</p>
+<p>Here, the review method itself needs attention. A possible revision is to distinguish an unsupported belief from a recurring defect in the way evidence is gathered. Another is to ask what observation would show that a proposed change helped.</p>
+<p>The human analogy is reflection on one's learning habits: noticing that constantly switching study techniques prevents a fair assessment of any of them. This is an intuitive comparison, not a claim that our architecture reproduces the brain.</p>
+<p>Nor does allowing a reviewer to edit its instructions prove that it becomes better at reviewing. A convincing explanation is a candidate improvement. Its consequences still need to be observed and measured.</p>
+
+<h2>Where these ideas live</h2>
+<p>In our product harness, the task agent maintains its world model. Local reviewers examine learning within a task; a shared reviewer considers procedures that could help across tasks. Their review methods are separate from the guidance given to the player. An on-demand researcher investigates unresolved questions when ordinary experience is insufficient.</p>
+<p>Our research setup groups these responsibilities differently: a learner edits the domain skill and its own learning procedure within a controlled evaluation loop. Consequently, labels such as L1 and L2 do not refer to identical components in both systems. The useful distinction is what changes: task knowledge, player guidance, or the method for improving that guidance.</p>
+<p>These responsibilities do not require an endless tower of agents. <a href="/blog/recursive-language-models/">Recursive execution</a> helps organize work; persistent learning requires deciding which changes to retain and why.</p>
+
+<h2>Carry the method, test the transfer</h2>
+<p>A fresh agent with empty task memory is useful for evaluation, but it is not enough. If its shared skill contains the route through a training puzzle, that agent has inherited the answer through another channel.</p>
+<p>We therefore want shared guidance to carry procedures rather than game solutions. Task facts remain local. Methods retain their conditions and supporting evidence. Claims about transfer require evaluation beyond the situations that produced the change.</p>
+<p>This separation also suggests a practical rule: revise a belief when a prediction fails; reconsider the learning method when the way of learning repeatedly fails to resolve the problem.</p>
+<p>Our <a href="/blog/learning-across-games/">batched-learning experiments</a> put that distinction under pressure. They ask whether a shared skill can help agents learn across games, instead of becoming a collection of answers to individual games. That is the difference we want our experiments to measure.</p>
+
+</div>
+<aside class="series-nav" aria-label="Continue the series">
+<h2>In this series</h2>
+<ol><li><a href="/blog/agents-shouldnt-start-over/">Agents Shouldn’t Start Over</a></li>
+<li><a href="/blog/recursive-language-models/">Recursive Language Models, Explained</a></li>
+<li><a href="/blog/learning-to-learn/" aria-current="page">Learning Facts, Learning Methods, Learning to Learn</a></li>
+<li><a href="/blog/learning-across-games/">Learning Across Games: Why We Chose Batches</a></li></ol>
+</aside>
+</article>
+</main>
+<footer class="site-footer"><span>recursa labs</span><span>2026</span></footer>
+</div>
+</body>
+</html>
