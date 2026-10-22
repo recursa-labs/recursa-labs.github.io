@@ -12,7 +12,8 @@
 
 main:focus{outline:none}
 
-[data-view="home"] h1,.research-sections dt,.lab-note{font-family:Georgia,"Times New Roman",serif;letter-spacing:-.025em}
+[data-view="home"]{font-family:Georgia,"Times New Roman",serif}
+[data-view="home"] h1,.research-sections dt,.lab-note{letter-spacing:-.025em}
 
 .blog-intro{max-width:620px;color:var(--muted);font-size:19px;margin:-12px 0 40px}
 .post-list{list-style:none;padding:0;margin:0}
