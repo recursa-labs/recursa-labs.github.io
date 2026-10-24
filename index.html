@@ -8,7 +8,7 @@
 <title>recursa labs — Continual learning</title>
 <link rel="icon" type="image/svg+xml" href="./assets/mark.svg">
 <link rel="preload" href="./assets/inter-400.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="./styles.css?v=a4978dd54004">
+<link rel="stylesheet" href="./styles.css?v=21952f2eb04c">
 <script src="./app.js" defer></script>
 </head>
 <body>
@@ -30,13 +30,44 @@
 <text x="385" y="424">parent</text><text x="271" y="346" text-anchor="end">child 01</text><text x="405" y="342">child 02</text>
 </g></svg></div>
 </section>
-<dl class="lab-table research-sections" id="direction">
-<div class="table-row"><dt><span class="section-index">01</span>Focus</dt><dd><ul><li>Build self-learning agents that improve as they work.</li><li>Learn through experience: observe, try, reflect, and adapt.</li><li>Turn mistakes into lasting lessons, with the aim of never repeating them.</li><li>Carry useful knowledge from familiar tasks into new situations.</li></ul></dd></div>
-<div class="table-row"><dt><span class="section-index">02</span>Strategies</dt><dd><ul><li>L0: Build world models through observation and experimentation.</li><li>L1: Turn task experience into reusable domain skills.</li><li>L2: Learn how to learn by revising learning procedures.</li><li>L3: Score gains in learning efficiency and improve the learning process itself.</li></ul></dd></div>
-<div class="table-row"><dt><span class="section-index">03</span>Values</dt><dd><ul><li>Understand how intelligence works, and build systems from those insights.</li><li>Follow curiosity, question assumptions, and stay close to new research.</li><li>Test ideas through controlled, reproducible experiments.</li><li>Explore domains from ARC-AGI puzzles to long-horizon tasks such as Reddit marketing.</li></ul></dd></div>
-<div class="table-row"><dt><span class="section-index">04</span>Roadmap</dt><dd><ul><li>Complete self-learning experiments and establish a concrete architecture.</li><li>Build a general-purpose harness that anyone can use.</li></ul></dd></div>
-</dl>
-<p class="lab-note">Each experience.<br><span>A better starting point.</span></p>
+<div class="research-sections" id="direction">
+<section class="home-section" aria-labelledby="interests-title">
+<h2 id="interests-title"><span class="section-index">01</span>Interests</h2>
+<div class="section-content interest-list">
+<article class="interest"><h3>Recursive self-improvement (RSI)</h3><p>Agents that revise their own harnesses, exploration policies, and learning procedures.</p><h4>Papers we like</h4><ul class="paper-list"><li><a href="https://arxiv.org/abs/2505.22954">Darwin Gödel Machine: Open-Ended Evolution of Self-Improving Agents</a></li><li><a href="https://arxiv.org/abs/2603.19461">HyperAgents</a></li><li><a href="https://arxiv.org/abs/2609.24972">RRSI: Regularized Recursive Self-Improvement of Agent Harnesses</a></li><li><a href="https://arxiv.org/abs/2609.15364">RSIAgent: Autonomous Exploration for Recursive Self-Improvement in New Environments</a></li></ul></article>
+<article class="interest"><h3>Recursive language models (RLMs)</h3><p>Recursive decomposition, external context, and inference-time optimization of agent harnesses.</p><h4>Papers we like</h4><ul class="paper-list"><li><a href="https://arxiv.org/abs/2512.24601">Recursive Language Models</a></li><li><a href="https://arxiv.org/abs/2608.23552">Prime Agent: A Self-Improving RLM Harness</a></li><li><a href="https://arxiv.org/abs/2610.14224">Harness 2: Recursive Agent Harnessing for an Open World</a></li><li><a href="https://arxiv.org/abs/2608.10471">RLMOpt: Adaptive Prompt Optimization via Recursive Language Models</a></li></ul></article>
+<article class="interest"><h3>Continual learning &amp; skill evolution</h3><p>Persistent procedural knowledge, feedback-driven skill optimization, and verification across tasks.</p><h4>Papers we like</h4><ul class="paper-list"><li><a href="https://arxiv.org/abs/2605.23904">SkillOpt: Executive Strategy for Self-Evolving Agent Skills</a></li><li><a href="https://arxiv.org/abs/2604.01687">CoEvoSkills: Self-Evolving Agent Skills via Co-Evolutionary Verification</a></li></ul></article>
+<article class="interest"><h3>World models &amp; self-play</h3><p>Textual transition models, executable environments, and adaptive curricula for exploration.</p><h4>Papers we like</h4><ul class="paper-list"><li><a href="https://arxiv.org/abs/2606.09032">Bridging the Agent-World Gap: Text World Models for LLM-based Agents</a></li><li><a href="https://arxiv.org/abs/2608.19197">SPADE: Self-Play in Adaptive Synthetic Executable Environments</a></li><li><a href="https://arxiv.org/abs/2609.14858">Dream-RSI: Recursive Self-Improvement through Evolving Worlds</a></li></ul></article>
+<article class="interest"><h3>Compositional generalization</h3><p>Reusable decomposition strategies that transfer across task lengths and domains.</p><h4>Papers we like</h4><ul class="paper-list"><li><a href="https://alexzhang13.github.io/blog/2026/mgh/">Language Model Harnesses Are Compositional Generalizers</a></li></ul></article>
+<article class="interest"><h3>Automated research &amp; agent design</h3><p>Search over agent architectures and research methods, with improvements evaluated on held-out tasks.</p><h4>Papers we like</h4><ul class="paper-list"><li><a href="https://arxiv.org/abs/2408.08435">Automated Design of Agentic Systems</a></li><li><a href="https://arxiv.org/abs/2609.26457">AIDE2: Recursive Self-Improvement of AI Research Agents</a></li></ul></article>
+</div>
+</section>
+<section class="home-section" aria-labelledby="roadmap-title">
+<h2 id="roadmap-title"><span class="section-index">02</span>Roadmap</h2>
+<div class="section-content roadmap-products">
+<article class="roadmap-product" aria-labelledby="rlm-title">
+<p class="product-label">01 / Planned product</p>
+<h3 id="rlm-title">Modular Minimal RLM</h3>
+<p>A minimal, bloat-free harness built on <a href="https://arxiv.org/abs/2512.24601">Recursive Language Models by Alex L. Zhang, Tim Kraska, and Omar Khattab</a>, with extensibility inspired by Pi.</p>
+<p>For a young project with a small community, extensibility needs a dependable starting point. The core team will ship and maintain modules, so users can add capabilities without having to evaluate community extensions or work out which ones are still maintained.</p>
+<ul class="product-priorities">
+<li><strong>Memory safety:</strong> make the runtime dependable for long-running agents.</li>
+<li><strong>Cache efficiency:</strong> improve RLM cache hit rates and reduce total cost in day-to-day use, measured against traditional agent harnesses.</li>
+</ul>
+</article>
+<article class="roadmap-product" aria-labelledby="asi-title">
+<p class="product-label">02 / Planned product</p>
+<h3 id="asi-title">ASI <span class="product-expansion">(Accelerate Self-Learning)</span></h3>
+<p>A recursive self-learning system designed to generalize across domains and adapt the learning process itself for faster results.</p>
+<p>Learning will be easy to toggle off: explore and improve during development, then freeze learned behavior for production when stability matters more than accelerated learning.</p>
+<ul class="domain-list">
+<li><strong>Simulations:</strong> ARC-AGI-3, video games, vending benchmarks (VendorBench), PokerBench, F1Race, strategy games, and SocietyElection. For F1Race, we want agents to infer the underlying physical model from limited visibility (a 60° field of view and 100 m range), with procedurally generated tracks and MCP tools exposing velocity, acceleration, position, and track observations.</li>
+<li><strong>Real world:</strong> long-running QA audits that create or rate repository issues; multi-repo coding and CLI/browser skill engineering; trading; Reddit marketing; Luma acceptance prediction; growing faceless social channels; and GPU kernel optimization. For QA and acceptance tasks, agents should report both their classification and confidence.</li>
+</ul>
+</article>
+</div>
+</section>
+</div>
 </div>
 <section class="secondary-view page-view" data-view="blog" hidden aria-labelledby="blog-title"><header class="hero"><div class="hero-copy"><h1 id="blog-title">Blog<span class="brand-dot">.</span></h1><p class="hero-intro">Notes from our research into agents that learn through experience.<br>Ideas, methods, and experiments.</p></div><div class="hero-study"><img class="hero-illustration" src="/assets/blog-hero.svg" width="500" height="450" alt="Research notes branching into connected ideas"></div></header><ol class="post-list">
 <li><a class="post-card" href="/blog/learning-across-games/"><img class="post-thumbnail" src="/assets/blog/learning-across-games-cover.svg" width="240" height="160" alt=""><div><h2>Learning Across Games: Why We Chose Batches</h2><p>What our ARC-AGI-3 experiments taught us about shared skills, regression checks, and specialization.</p><span class="post-meta"><time datetime="2026-10-21">October 21, 2026</time></span></div></a></li>
@@ -49,7 +80,7 @@
 <div class="team-identity"><img class="team-photo" src="/assets/team/nishant-gaurav.jpg" width="269" height="269" alt="Nishant Gaurav">
 <h2 id="nishant-name"><a href="https://www.linkedin.com/in/nishantg1">Nishant Gaurav</a></h2><p class="team-role">Researcher</p>
 <a class="profile-link" href="https://www.linkedin.com/in/nishantg1">LinkedIn ↗</a></div>
-<div class="team-work"><ul><li>Founder and former CEO of Agentr, where he directed research into self-learning browser agents.</li><li>Built multiple AI products and contributed to published research, bringing together research direction and product development.</li><li>At Recursa Labs, focuses on turning advances in agent learning into systems that improve through experience.</li></ul></div>
+<div class="team-work"><ul><li>Founder of Agentr, where he directed research into self-learning browser agents.</li><li>Built multiple AI products and contributed to published research, bringing together research direction and product development.</li><li>At Recursa Labs, focuses on turning advances in agent learning into systems that improve through experience.</li></ul></div>
 </article>
 <article class="team-profile" aria-labelledby="tejas-name">
 <div class="team-identity"><img class="team-photo" src="/assets/team/tejas-ravishankar.jpg" width="400" height="400" alt="Tejas Ravishankar">

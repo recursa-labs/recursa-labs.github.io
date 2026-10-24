@@ -61,3 +61,25 @@ main:focus{outline:none}
 .team-profile li::marker{color:var(--green)}
 .profile-link{font-size:14px;text-decoration-color:var(--green)}
 @media(max-width:600px){.team-profile{grid-template-columns:1fr;gap:24px}.team-work ul{margin-bottom:0}}
+
+.home-section{display:grid;grid-template-columns:minmax(180px,1fr) minmax(0,2.5fr);gap:48px;padding:36px 0 44px}
+.home-section+.home-section{border-top:1px solid var(--line)}
+.home-section>h2{display:flex;align-items:baseline;gap:16px;margin:0;font:400 28px/1.3 Georgia,"Times New Roman",serif;letter-spacing:-.025em}
+.section-content{min-width:0;max-width:760px}
+.interest+.interest{margin-top:30px;padding-top:26px;border-top:1px solid var(--line)}
+.interest h3,.roadmap-product h3{margin:0 0 10px;font-size:22px;font-weight:500;line-height:1.35;letter-spacing:-.5px}
+.interest>p{color:var(--muted)}
+.interest h4{margin:17px 0 9px;font:400 11px/1.5 monospace;letter-spacing:.07em;text-transform:uppercase;color:var(--green)}
+.paper-list{font-size:14px;line-height:1.65}
+.research-sections .paper-list li+li{margin-top:7px}
+.paper-list a,.roadmap-product a{text-decoration-color:var(--green);overflow-wrap:anywhere}
+.paper-list a:hover,.roadmap-product a:hover{color:var(--green)}
+.product-label{margin-bottom:12px;font:400 11px/1.5 monospace;letter-spacing:.05em;color:var(--green)}
+.roadmap-product h3{font-size:26px}
+.product-expansion{font-size:19px;color:var(--muted)}
+.roadmap-product>p+p,.roadmap-product>ul{margin-top:18px}
+.roadmap-product+.roadmap-product{margin-top:36px;padding-top:32px;border-top:1px solid var(--line)}
+.research-sections .domain-list li+li{margin-top:20px}
+.roadmap-products{padding-bottom:8px}
+@media(max-width:800px){.home-section{gap:28px}}
+@media(max-width:600px){.home-section{grid-template-columns:1fr;gap:26px;padding:28px 0 32px}.home-section>h2{font-size:27px}.interest h3{font-size:21px}.roadmap-product h3{font-size:24px}.product-expansion{display:block;margin-top:5px;font-size:18px}}
